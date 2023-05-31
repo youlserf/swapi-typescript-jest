@@ -9,43 +9,11 @@ interface PersonItemProps {
   setError: (error: string) => void;
 }
 
-const ListItem = styled.li`
-  max-width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 16px;
-  padding-top: 16px;
-`;
-
-const PersonName = styled.h2`
-  font-family: "SF Pro Display";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  line-height: 20px;
-  letter-spacing: 0.0125em;
-  color: #333333;
-`;
-
-const PersonDescription = styled.p`
-  font-family: "SF Pro Display";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-  letter-spacing: 0.0125em;
-  color: #828282;
-`;
-
-const PersonItem: React.FC<PersonItemProps> = ({
+const PersonItem = ({
   character,
   setSelectedPerson,
   setError,
-}) => {
+}: PersonItemProps) => {
   const handleCharacterClick = async () => {
     try {
       const vehiclesUrls: string[] = character.vehicles;
@@ -84,3 +52,37 @@ const PersonItem: React.FC<PersonItemProps> = ({
 };
 
 export default PersonItem;
+
+const ListItem = styled.li`
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 16px;
+  padding-top: 16px;
+  @media (max-width: 450px) {
+    padding-right: 25%;
+  }
+`;
+
+const PersonName = styled.h2`
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 20px;
+  letter-spacing: 0.0125em;
+  color: #333333;
+`;
+
+const PersonDescription = styled.p`
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.0125em;
+  color: #828282;
+`;
