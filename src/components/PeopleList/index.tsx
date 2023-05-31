@@ -1,102 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PullToRefresh from "react-pull-to-refresh";
-
-import arrowLeft from "../assets/arrow-left.svg";
 import DetailPerson from "./DetailPerson";
 import PersonItem from "./PersonItem";
-import Loader from "./Loader";
-import { Character } from "../Interfaces";
+import Loader from "../Loader";
+import { Character } from "../../Interfaces";
 import Header from "./Header";
 
-import { fetchCharacters } from "../services/api";
-
-const Container = styled.div`
-  min-width: 350px;
-  width: 100%;
-  max-width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-const MainContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  max-width: 100%;
-  position: relative;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-const CharactersContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  background-color: white;
-  flex: 1;
-  max-height: 100%;
-  overflow-y: scroll;
-
-  /* Customize the scrollbar */
-  ::-webkit-scrollbar {
-    width: 0px; /* Width of the scrollbar */
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: transparent; /* Transparent background */
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2); /* Transparent background with opacity */
-    border-radius: 4px; /* Rounded corners */
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(
-      0,
-      0,
-      0,
-      0.4
-    ); /* Transparent background with opacity on hover */
-  }
-`;
-
-const InformationContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 550px) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    transition: all 0.5;
-  }
-`;
-
-const LoadingText = styled.div`
-  padding-top: 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const ErrorText = styled.p`
-  font-family: "SF Pro Display";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  color: #ec5757;
-  text-align: center;
-`;
+import { fetchCharacters } from "../../services/api";
 
 const PeopleList = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -237,3 +148,90 @@ const PeopleList = () => {
 };
 
 export default PeopleList;
+
+const Container = styled.div`
+  min-width: 350px;
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  position: relative;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+const CharactersContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  background-color: white;
+  flex: 1;
+  max-height: 100%;
+  overflow-y: scroll;
+
+  /* Customize the scrollbar */
+  ::-webkit-scrollbar {
+    width: 0px; /* Width of the scrollbar */
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Transparent background */
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2); /* Transparent background with opacity */
+    border-radius: 4px; /* Rounded corners */
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(
+      0,
+      0,
+      0,
+      0.4
+    ); /* Transparent background with opacity on hover */
+  }
+`;
+
+const InformationContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 550px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    transition: all 0.5;
+  }
+`;
+
+const LoadingText = styled.div`
+  padding-top: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const ErrorText = styled.p`
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  color: #ec5757;
+  text-align: center;
+`;

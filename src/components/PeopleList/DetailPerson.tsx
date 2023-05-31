@@ -1,60 +1,9 @@
-import React from "react";
-
 import styled from "styled-components";
-import { Character } from "../Interfaces";
+import { Character } from "../../Interfaces";
 
 interface DetailPersonProps {
   person: Character | null;
 }
-
-interface Vehicle {
-  name: string;
-  // Add any other properties related to the vehicle
-}
-
-const Heading = styled.h2`
-  padding-top: 32px;
-  font-family: "SF Pro Display";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  line-height: 20px;
-  letter-spacing: 0.0125em;
-  color: #333333;
-  text-align: start;
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  list-style: none;
-  padding-top: 14px;
-  padding-bottom: 14px;
-  @media (max-width: 750px) and (min-width: 500px) {
-    flex-direction: column;
-  }
-`;
-
-const Label = styled.p`
-  font-family: "SF Pro Display";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  line-height: 20px;
-  letter-spacing: 0.0125em;
-  color: #828282;
-  text-align: start;
-`;
-
-const Value = styled.p`
-  font-weight: 700;
-  font-size: 17px;
-  line-height: 20px;
-  letter-spacing: 0.0125em;
-  color: #333333;
-  text-align: start;
-`;
 
 const DetailPerson = ({ person }: DetailPersonProps) => {
   return (
@@ -122,3 +71,47 @@ const DetailPerson = ({ person }: DetailPersonProps) => {
 };
 
 export default DetailPerson;
+
+const Heading = styled.h2`
+  padding-top: 32px;
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 20px;
+  letter-spacing: 0.0125em;
+  color: #333333;
+  text-align: start;
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style: none;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  @media (max-width: 750px) and (min-width: 500px) {
+    flex-direction: column;
+  }
+`;
+
+const Label = styled.p`
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 20px;
+  letter-spacing: 0.0125em;
+  color: #828282;
+  text-align: start;
+`;
+
+const Value = styled.p`
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 20px;
+  letter-spacing: 0.0125em;
+  color: #333333;
+  text-align: start;
+`;

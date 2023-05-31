@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import DetailPerson from "../components/DetailPerson";
+import DetailPerson from "../components/PeopleList/DetailPerson";
 import { Character } from "../Interfaces";
 
 const mockPerson: Character = {

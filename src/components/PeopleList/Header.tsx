@@ -1,6 +1,5 @@
-import React from "react";
 import styled from "styled-components";
-import arrowLeft from "../assets/arrow-left.svg";
+import arrowLeft from "../../assets/arrow-left.svg";
 
 interface HeaderProps {
   title: string;
@@ -35,7 +34,7 @@ const GoBackIcon = styled.img`
   cursor: pointer;
 `;
 
-const Header: React.FC<HeaderProps> = ({ title, showGoBackIcon, onGoBack }) => {
+const Header = ({ title, showGoBackIcon, onGoBack }: HeaderProps) => {
   return (
     <HeaderContainer>
       {showGoBackIcon && (
