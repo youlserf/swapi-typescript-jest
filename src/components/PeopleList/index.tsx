@@ -4,6 +4,7 @@ import PullToRefresh from "react-pull-to-refresh";
 import DetailPerson from "./DetailPerson";
 import PersonItem from "./PersonItem";
 import Loader from "../Loader";
+
 import { Character } from "../../Interfaces";
 import Header from "./Header";
 
