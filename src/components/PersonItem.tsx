@@ -18,6 +18,7 @@ const ListItem = styled.li`
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 16px;
+  padding-top: 16px;
 `;
 
 const PersonName = styled.h2`

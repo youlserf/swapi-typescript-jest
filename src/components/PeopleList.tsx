@@ -24,14 +24,12 @@ const MainContent = styled.div`
   display: flex;
   flex-direction: row;
   max-width: 100%;
-  gap: 16px;
   position: relative;
   padding-left: 16px;
   padding-right: 16px;
 `;
 
 const CharactersContainer = styled.div`
-  padding-top: 16px;
   display: flex;
   gap: 16px;
   flex-direction: column;
@@ -71,7 +69,7 @@ const InformationContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  @media (max-width: 500px) {
+  @media (max-width: 550px) {
     position: absolute;
     top: 0;
     left: 0;
@@ -83,6 +81,7 @@ const InformationContainer = styled.div`
 `;
 
 const LoadingText = styled.div`
+  padding-top: 16px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -110,6 +109,9 @@ const PeopleList = () => {
 
   const handleRefresh = async () => {
     try {
+      if (isLoading) {
+        return;
+      }
       setError(null);
       setIsLoading(true);
       const characters = await fetchCharacters();
@@ -124,6 +126,9 @@ const PeopleList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (isLoading) {
+          return;
+        }
         setError(null);
         setIsLoading(true);
         const characters = await fetchCharacters();
@@ -139,9 +144,9 @@ const PeopleList = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      const shouldShowGoBackIcon = window.innerWidth < 500;
+      const shouldShowGoBackIcon = window.innerWidth < 550;
       setShowGoBackIcon(shouldShowGoBackIcon);
-      if (selectedPerson && window.innerWidth < 500 && containerRef.current) {
+      if (selectedPerson && window.innerWidth < 550 && containerRef.current) {
         containerRef.current.style.display = "none";
       } else {
         if (containerRef.current) {
@@ -188,7 +193,10 @@ const PeopleList = () => {
           }}
         >
           <CharactersContainer>
-            <PullToRefresh onRefresh={() => handleRefresh()}>
+            <PullToRefresh
+              onRefresh={() => handleRefresh()}
+              style={{ minHeight: "100%" }}
+            >
               {!error && !isLoading && (
                 <>
                   {characters.map((character, index) => (
@@ -207,7 +215,11 @@ const PeopleList = () => {
                   <Loader /> <p>Loading...</p>
                 </LoadingText>
               ) : (
-                error && <ErrorText>Failed to load data</ErrorText>
+                error && (
+                  <div style={{ minHeight: "100%", paddingTop: "16px" }}>
+                    <ErrorText>Failed to load data</ErrorText>
+                  </div>
+                )
               )}
             </PullToRefresh>
           </CharactersContainer>
