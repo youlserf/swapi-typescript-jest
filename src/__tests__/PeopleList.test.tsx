@@ -1,21 +1,21 @@
 import { render, act, fireEvent } from "@testing-library/react";
 import PeopleList from "../components/PeopleList";
-import { fetchCharacters } from "../services/api";
+import { fetchPersons } from "../services/api";
 
-// Mock the fetchCharacters function
+// Mock the fetchPersons function
 jest.mock("../services/api", () => ({
-  fetchCharacters: jest.fn(),
+  fetchPersons: jest.fn(),
 }));
 
 describe("PeopleList", () => {
   beforeEach(() => {
     // Reset the mock implementation before each test
-    (fetchCharacters as jest.Mock).mockReset();
+    (fetchPersons as jest.Mock).mockReset();
   });
 
   test("renders loading state while fetching characters", async () => {
     // Set up the mock implementation to return a promise that never resolves
-    (fetchCharacters as jest.Mock).mockResolvedValue(new Promise(() => {}));
+    (fetchPersons as jest.Mock).mockResolvedValue(new Promise(() => {}));
 
     // Render the component
     const { getByText } = render(<PeopleList />);
@@ -26,7 +26,7 @@ describe("PeopleList", () => {
 
   test("renders error state when fetching characters fails", async () => {
     // Set up the mock implementation to throw an error
-    (fetchCharacters as jest.Mock).mockRejectedValue(
+    (fetchPersons as jest.Mock).mockRejectedValue(
       new Error("Error fetching characters")
     );
 
@@ -56,7 +56,7 @@ describe("PeopleList", () => {
       },
       // Add more characters if needed
     ];
-    (fetchCharacters as jest.Mock).mockResolvedValue(characters);
+    (fetchPersons as jest.Mock).mockResolvedValue(characters);
 
     // Render the component
     const { getByText } = render(<PeopleList />);

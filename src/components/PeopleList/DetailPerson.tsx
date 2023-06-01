@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { Character } from "../../Interfaces";
+import { Person } from "../../models/Models";
 
 interface DetailPersonProps {
-  person: Character | null;
+  person: Person | null;
 }
 
 const DetailPerson = ({ person }: DetailPersonProps) => {

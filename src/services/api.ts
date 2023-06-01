@@ -1,9 +1,22 @@
-import { Species, Homeworld, Character } from "../Interfaces";
+import { Species, Homeworld, Person } from "../models/Models";
 
-export const fetchSpecies = async (speciesUrl: string): Promise<Species> => {
+const SWAPI_BASE_URL = "https://swapi.dev/api";
+const MAX_PAGES = 2;
+const FETCH_DELAY = 1000; // 2 seconds
+
+const fetchJson = async (url: string): Promise<any> => {
   try {
-    const response = await fetch(speciesUrl);
+    const response = await fetch(url);
     const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(`Error fetching data from ${url}`);
+  }
+};
+
+const fetchSpecies = async (speciesUrl: string): Promise<Species> => {
+  try {
+    const data = await fetchJson(speciesUrl);
     const species: Species = {
       name: data.name,
     };
@@ -14,12 +27,9 @@ export const fetchSpecies = async (speciesUrl: string): Promise<Species> => {
   }
 };
 
-export const fetchHomeworld = async (
-  homeworldUrl: string
-): Promise<Homeworld> => {
+const fetchHomeworld = async (homeworldUrl: string): Promise<Homeworld> => {
   try {
-    const response = await fetch(homeworldUrl);
-    const data = await response.json();
+    const data = await fetchJson(homeworldUrl);
     const homeworld: Homeworld = {
       name: data.name,
     };
@@ -30,25 +40,22 @@ export const fetchHomeworld = async (
   }
 };
 
-export const fetchCharacters = async () => {
+const fetchPersons = async (): Promise<Person[]> => {
   try {
-    // Fetch data from three pages (page 1 and 2)
-    const characters = [];
-    for (let i = 1; i <= 2; i++) {
-      const page = Math.floor(Math.random() * 10) + 1;
-      const response = await fetch(
-        `https://swapi.dev/api/people/?page=${page}`
-      );
+    const persons: Person[] = [];
 
-      const data = await response.json();
-      const results = data.results;
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const randomPage = Math.floor(Math.random() * 10) + 1;
+      const url = `${SWAPI_BASE_URL}/people/?page=${randomPage}`;
+      const { results } = await fetchJson(url);
 
-      const characterData = await Promise.all(
-        results.map(async (result: Character) => {
+      const personData = await Promise.all(
+        results.map(async (result: Person) => {
           const species =
             result.species.length > 0
               ? await fetchSpecies(result.species[0])
               : { name: "Not identified" };
+
           const homeworld = await fetchHomeworld(result.homeworld);
 
           return {
@@ -65,14 +72,18 @@ export const fetchCharacters = async () => {
         })
       );
 
-      // Simulate a delay of 2 seconds
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      persons.push(...personData);
 
-      characters.push(...characterData);
+      if (page < MAX_PAGES) {
+        // Simulate a delay between requests to avoid API rate limiting
+        await new Promise((resolve) => setTimeout(resolve, FETCH_DELAY));
+      }
     }
 
-    return characters;
+    return persons;
   } catch (error) {
     throw new Error("Error fetching characters");
   }
 };
+
+export { fetchPersons };

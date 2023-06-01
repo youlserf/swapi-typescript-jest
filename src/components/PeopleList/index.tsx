@@ -5,71 +5,61 @@ import DetailPerson from "./DetailPerson";
 import PersonItem from "./PersonItem";
 import Loader from "../Loader";
 
-import { Character } from "../../Interfaces";
 import Header from "./Header";
 
-import { fetchCharacters } from "../../services/api";
+import { fetchPersons } from "../../services/api";
+import { Person } from "../../models/Models";
 
 const PeopleList = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [selectedPerson, setSelectedPerson] = useState<Character | null>(null);
+  const [persons, setPersons] = useState<Person[]>([]);
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
   const [showGoBackIcon, setShowGoBackIcon] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleRefresh = async () => {
+    fetchData();
+  };
+
+  const fetchData = async () => {
+    setSelectedPerson(null);
     try {
       if (isLoading) {
         return;
       }
       setError(null);
       setIsLoading(true);
-      const characters = await fetchCharacters();
-      setCharacters(characters);
+      const persons = await fetchPersons();
+      setPersons(persons);
     } catch (error) {
-      setError("Error fetching characters");
+      setError("Error fetching persons");
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (isLoading) {
-          return;
-        }
-        setError(null);
-        setIsLoading(true);
-        const characters = await fetchCharacters();
-        setCharacters(characters);
-      } catch (error) {
-        setError("Error fetching characters");
-      } finally {
-        setIsLoading(false);
+  const handleResize = () => {
+    const shouldShowGoBackIcon = window.innerWidth < 550;
+    setShowGoBackIcon(shouldShowGoBackIcon);
+    if (selectedPerson && window.innerWidth < 550 && containerRef.current) {
+      containerRef.current.style.display = "none";
+    } else {
+      if (containerRef.current) {
+        containerRef.current.style.display = "flex";
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      const shouldShowGoBackIcon = window.innerWidth < 550;
-      setShowGoBackIcon(shouldShowGoBackIcon);
-      if (selectedPerson && window.innerWidth < 550 && containerRef.current) {
-        containerRef.current.style.display = "none";
-      } else {
-        if (containerRef.current) {
-          containerRef.current.style.display = "flex";
-        }
-      }
-    };
-
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -87,7 +77,7 @@ const PeopleList = () => {
             ? selectedPerson.name
             : "People of Star Wars"
         }
-        showGoBackIcon={selectedPerson && showGoBackIcon ? true : false}
+        showGoBackIcon={!!(selectedPerson && showGoBackIcon)}
         onGoBack={handleGoBack}
       />
       <MainContent>
@@ -104,25 +94,27 @@ const PeopleList = () => {
             zIndex: 1,
           }}
         >
-          <CharactersContainer>
+          <PersonsContainer>
             <PullToRefresh
               onRefresh={() => handleRefresh()}
               style={{ minHeight: "100%" }}
             >
               {!error && !isLoading && (
                 <>
-                  {characters.map((character, index) => (
+                  {persons.map((person, index) => (
                     <PersonItem
                       key={index}
-                      character={character}
+                      person={person}
                       setSelectedPerson={setSelectedPerson}
                       setError={setError}
+                      setIsLoading={setIsLoading}
+                      isLoading={isLoading}
                     />
                   ))}
                 </>
               )}
 
-              {isLoading ? (
+              {isLoading && !selectedPerson ? (
                 <LoadingText>
                   <Loader /> <p>Loading...</p>
                 </LoadingText>
@@ -134,9 +126,9 @@ const PeopleList = () => {
                 )
               )}
             </PullToRefresh>
-          </CharactersContainer>
+          </PersonsContainer>
         </div>
-        {selectedPerson && (
+        {!isLoading && selectedPerson && (
           <InformationContainer>
             <div style={{ paddingLeft: "16px", paddingRight: "16px" }}>
               <DetailPerson person={selectedPerson} />
@@ -168,7 +160,7 @@ const MainContent = styled.div`
   padding-right: 16px;
 `;
 
-const CharactersContainer = styled.div`
+const PersonsContainer = styled.div`
   display: flex;
   gap: 16px;
   flex-direction: column;

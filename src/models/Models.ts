@@ -1,7 +1,7 @@
 export interface Vehicle {
   name: string;
 }
-export interface Character {
+export interface Person {
   name: string;
   hair_color: string;
   skin_color: string;

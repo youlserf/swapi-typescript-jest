@@ -1,21 +1,32 @@
 import arrowIcon from "../../assets/arrow-right.svg";
 import styled from "styled-components";
-import { Character, Vehicle } from "../../Interfaces";
+import { Person, Vehicle } from "../../models/Models";
+import { useState } from "react";
 
 interface PersonItemProps {
-  character: Character;
-  setSelectedPerson: (character: Character) => void;
+  person: Person;
+  setSelectedPerson: (person: Person) => void;
+  setIsLoading: (loading: boolean) => void;
+  isLoading: boolean;
   setError: (error: string) => void;
 }
 
 const PersonItem = ({
-  character,
+  person,
   setSelectedPerson,
   setError,
 }: PersonItemProps) => {
-  const handleCharacterClick = async () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handlePersonClick = async () => {
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      const vehiclesUrls: string[] = character.vehicles;
+      const vehiclesUrls: string[] = person.vehicles;
       const vehiclesData: string[] = await Promise.all(
         vehiclesUrls.map(async (vehicleUrl: string) => {
           const vehicleResponse = await fetch(vehicleUrl);
@@ -26,23 +37,25 @@ const PersonItem = ({
           return vehicle.name;
         })
       );
-      const updatedCharacter: Character = {
-        ...character,
-        vehicles: vehiclesData,
+      const updatedPerson: Person = {
+        ...person,
+        vehicles: vehiclesData.length > 0 ? vehiclesData : ["No vehicles"],
       };
 
-      setSelectedPerson(updatedCharacter);
+      setSelectedPerson(updatedPerson);
     } catch (error) {
-      setError("Error fetching character vehicles");
+      setError("Error fetching person vehicles");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <ListItem onClick={handleCharacterClick}>
+    <ListItem onClick={handlePersonClick}>
       <div>
-        <PersonName>{character.name}</PersonName>
+        <PersonName>{person.name}</PersonName>
         <PersonDescription>
-          {character.species[0]} from {character.homeworld}
+          {person.species[0]} from {person.homeworld}
         </PersonDescription>
       </div>
       <img src={arrowIcon} alt="Arrow Icon" />

@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import DetailPerson from "../components/PeopleList/DetailPerson";
-import { Character } from "../Interfaces";
+import { Person } from "../models/Models";
 
-const mockPerson: Character = {
+const mockPerson: Person = {
   name: "Luke Skywalker",
   hair_color: "Blond",
   skin_color: "Fair",
