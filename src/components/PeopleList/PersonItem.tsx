@@ -14,10 +14,10 @@ interface PersonItemProps {
 const PersonItem = ({
   person,
   setSelectedPerson,
+  setIsLoading,
+  isLoading,
   setError,
 }: PersonItemProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const handlePersonClick = async () => {
     if (isLoading) {
       return;
@@ -65,7 +65,7 @@ const PersonItem = ({
 
 export default PersonItem;
 
-const ListItem = styled.li`
+const ListItem = styled.div`
   max-width: 100%;
   display: flex;
   flex-direction: row;

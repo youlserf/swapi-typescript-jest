@@ -14,7 +14,7 @@ const PeopleList = () => {
   const [persons, setPersons] = useState<Person[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isLoadingDescription, setIsLoadingDescription] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showGoBackIcon, setShowGoBackIcon] = useState(false);
 
@@ -107,8 +107,8 @@ const PeopleList = () => {
                       person={person}
                       setSelectedPerson={setSelectedPerson}
                       setError={setError}
-                      setIsLoading={setIsLoading}
-                      isLoading={isLoading}
+                      setIsLoading={setIsLoadingDescription}
+                      isLoading={isLoadingDescription}
                     />
                   ))}
                 </>
