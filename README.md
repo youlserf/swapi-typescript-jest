@@ -22,8 +22,8 @@ To get started with this template, follow these steps:
 
 ## After the installation is complete, you can use the following scripts:
 
-npm run dev: Starts the development server with hot module replacement.
-npm run build: Builds the production-ready optimized version of the application.
-npm run serve: Serves the production build locally for testing.
-npm test: Runs the test suite using Jest.
+- npm run dev: Starts the development server with hot module replacement.
+- npm run build: Builds the production-ready optimized version of the application.
+- npm run serve: Serves the production build locally for testing.
+- npm test: Runs the test suite using Jest.
 
