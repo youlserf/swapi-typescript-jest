@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PullToRefresh from "react-pull-to-refresh";
 import DetailPerson from "./DetailPerson";
-import PersonItem from "./PersonItem";
+import PersonItem, { ListItem } from "./PersonItem";
 import Loader from "../Loader";
 
 import Header from "./Header";
@@ -11,29 +11,37 @@ import { fetchPersons } from "../../services/api";
 import { Person } from "../../models/Models";
 
 const PeopleList = () => {
-  const [persons, setPersons] = useState<Person[]>([]);
+  const [people, setPeople] = useState<Person[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDescription, setIsLoadingDescription] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showGoBackIcon, setShowGoBackIcon] = useState(false);
 
+  const [nextPage, setNextPage] = useState(1);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleRefresh = async () => {
-    fetchData();
+  const refreshPeople = async () => {
+    setNextPage(1);
+    setSelectedPerson(null);
+    setPeople([]);
+    fetchMorePeople();
   };
 
-  const fetchData = async () => {
-    setSelectedPerson(null);
+  const fetchMorePeople = async () => {
     try {
       if (isLoading) {
         return;
       }
+
       setError(null);
       setIsLoading(true);
-      const persons = await fetchPersons();
-      setPersons(persons);
+      const persons = await fetchPersons(nextPage);
+      const newPeople = [...people, ...persons];
+      setPeople(newPeople);
+
+      setNextPage(nextPage + 1);
     } catch (error) {
       setError("Error fetching persons");
     } finally {
@@ -54,7 +62,7 @@ const PeopleList = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchMorePeople();
   }, []);
 
   useEffect(() => {
@@ -96,12 +104,12 @@ const PeopleList = () => {
         >
           <PersonsContainer>
             <PullToRefresh
-              onRefresh={() => handleRefresh()}
+              onRefresh={() => refreshPeople()}
               style={{ minHeight: "100%" }}
             >
               {!error && !isLoading && (
                 <>
-                  {persons.map((person, index) => (
+                  {people.map((person, index) => (
                     <PersonItem
                       key={index}
                       person={person}
@@ -111,6 +119,29 @@ const PeopleList = () => {
                       isLoading={isLoadingDescription}
                     />
                   ))}
+                  <div
+                    style={{
+                      paddingBottom: "16px",
+                      paddingTop: "16px",
+                      display: "flex",
+                      justifyContent: "center",
+                      minWidth: "100%",
+                    }}
+                  >
+                    {people.length > 0 && (
+                      <Button onClick={fetchMorePeople}>Fetch More</Button>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      paddingBottom: "16px",
+                      paddingTop: "16px",
+                      backgroundColor: "transparent",
+                      color: "transparent",
+                    }}
+                  >
+                    <p>Spacer</p>
+                  </div>
                 </>
               )}
 
@@ -168,6 +199,7 @@ const PersonsContainer = styled.div`
   flex: 1;
   max-height: 100%;
   overflow-y: scroll;
+  padding-bottom: 4rem;
 
   /* Customize the scrollbar */
   ::-webkit-scrollbar {
@@ -227,4 +259,50 @@ const ErrorText = styled.p`
   font-size: 17px;
   color: #ec5757;
   text-align: center;
+`;
+
+const Button = styled.button`
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  min-height: 3rem;
+  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+
+  &:hover,
+  &:focus {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: #f0f0f1;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    color: rgba(0, 0, 0, 0.65);
+    transform: translateY(0);
+  }
 `;
